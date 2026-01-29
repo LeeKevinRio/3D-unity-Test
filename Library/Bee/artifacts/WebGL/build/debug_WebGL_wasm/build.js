@@ -2055,13 +2055,6 @@ function dbg(text) {
   		return _JS_DOM_UnityCanvasSelector.ptr;
   	}
 
-  
-  function _JS_Eval_OpenURL(ptr)
-  {
-  	var str = UTF8ToString(ptr);
-  	window.open(str, '_blank', '');
-  }
-
   function _JS_FileSystem_Initialize()
   {
   	// no-op
@@ -2080,17 +2073,6 @@ function dbg(text) {
   		}
   	}
   }
-
-  function _JS_GetRandomBytes(destBuffer, numBytes) {
-      // Crypto is widely available in browsers, but if running in
-      // Node.js or another shell, it might not be present.
-      // getRandomValues() cannot be called for more than 64K bytes at a time.
-      if (typeof crypto === 'undefined' || numBytes > 65535)
-          return 0;
-  
-      crypto.getRandomValues(new Uint8Array(HEAPU8.buffer, destBuffer, numBytes));
-      return 1;
-    }
 
   function _JS_Get_WASM_Size()
     {
@@ -2532,37 +2514,6 @@ function dbg(text) {
   
   
   
-  
-  function _JS_MobileKeyboard_GetText(buffer, bufferSize)
-  {
-      // If the keyboard was closed, use the cached version of the input's text so that Unity can
-      // still ask for it.
-      var text = mobile_input && mobile_input.input ? mobile_input.input.value :
-          mobile_input_text ? mobile_input_text :
-          "";
-      if (buffer) stringToUTF8(text, buffer, bufferSize);
-      return lengthBytesUTF8(text);
-  }
-
-  
-  
-  function _JS_MobileKeyboard_GetTextSelection(outStart, outLength)
-  {
-      outStart = (outStart >> 2);
-      outLength = (outLength >> 2);
-  
-      if (!mobile_input) {
-          HEAP32[outStart] = 0;
-          HEAP32[outLength] = 0;
-          return;
-      }
-      HEAP32[outStart] = mobile_input.input.selectionStart;
-      HEAP32[outLength] = mobile_input.input.selectionEnd - mobile_input.input.selectionStart;
-  }
-
-  
-  
-  
   function _JS_MobileKeyboard_Hide(delay)
   {
       if (mobile_input_hide_delay) return;
@@ -2597,161 +2548,6 @@ function dbg(text) {
           mobile_input_hide_delay = setTimeout(hideMobileKeyboard, hideDelay);
       } else {
           hideMobileKeyboard();
-      }
-  }
-
-  
-  
-  function _JS_MobileKeyboard_SetCharacterLimit(limit)
-  {
-      if (!mobile_input) return;
-      mobile_input.input.maxLength = limit;
-  }
-
-  
-  
-  
-  
-  function _JS_MobileKeyboard_SetText(text)
-  {
-      if (!mobile_input) return;
-      text = UTF8ToString(text);
-      mobile_input.input.value = text;
-  }
-
-  
-  
-  function _JS_MobileKeyboard_SetTextSelection(start, length)
-  {
-      if (!mobile_input) return;
-      if(mobile_input.input.type === "number"){ // The type of input field has to be changed to use setSelectionRange
-          mobile_input.input.type = "text";
-          mobile_input.input.setSelectionRange(start, start + length);
-          mobile_input.input.type = "number";
-      } else {
-          mobile_input.input.setSelectionRange(start, start + length);
-      }
-  }
-
-  
-  
-  
-  
-  
-  function _JS_MobileKeyboard_Show(text, keyboardType, autocorrection, multiline, secure, alert,
-                                   placeholder, characterLimit)
-  {
-      if (mobile_input_hide_delay) {
-          clearTimeout(mobile_input_hide_delay);
-          mobile_input_hide_delay = null;
-      }
-  
-      text = UTF8ToString(text);
-      mobile_input_text = text;
-  
-      placeholder = UTF8ToString(placeholder);
-  
-      var container = document.body;
-  
-      var hasExistingMobileInput = !!mobile_input;
-  
-      // From KeyboardOnScreen::KeyboardTypes
-      var input_type;
-      var KEYBOARD_TYPE_NUMBERS_AND_PUNCTUATION = 2;
-      var KEYBOARD_TYPE_URL = 3;
-      var KEYBOARD_TYPE_NUMBER_PAD = 4;
-      var KEYBOARD_TYPE_PHONE_PAD = 5;
-      var KEYBOARD_TYPE_EMAIL_ADDRESS = 7;
-      if (!secure) {
-          switch (keyboardType) {
-              case KEYBOARD_TYPE_EMAIL_ADDRESS:
-                  input_type = "email";
-                  break;
-              case KEYBOARD_TYPE_URL:
-                  input_type = "url";
-                  break;
-              case KEYBOARD_TYPE_NUMBERS_AND_PUNCTUATION:
-              case KEYBOARD_TYPE_NUMBER_PAD:
-              case KEYBOARD_TYPE_PHONE_PAD:
-                  input_type = "number";
-                  break;
-              default:
-                  input_type = "text";
-                  break;
-          }
-      } else {
-          input_type = "password";
-      }
-  
-      if (hasExistingMobileInput) {
-          if (mobile_input.multiline != multiline) {
-              _JS_MobileKeyboard_Hide(false);
-              return;
-          }
-      }
-  
-      var inputContainer = mobile_input || document.createElement("div");
-      if (!hasExistingMobileInput) {
-          inputContainer.style = "width:100%; position:fixed; bottom:0px; margin:0px; padding:0px; left:0px; border: 1px solid #000; border-radius: 5px; background-color:#fff; font-size:14pt;";
-  
-          container.appendChild(inputContainer);
-          mobile_input = inputContainer;
-      }
-  
-      var input = hasExistingMobileInput ?
-          mobile_input.input :
-          document.createElement(multiline ? "textarea" : "input");
-  
-      mobile_input.multiline = multiline;
-      mobile_input.secure = secure;
-      mobile_input.keyboardType = keyboardType;
-      mobile_input.inputType = input_type;
-  
-      input.type = input_type;
-      input.style = "width:calc(100% - 85px); " + (multiline ? "height:100px;" : "") + "vertical-align:top; border-radius: 5px; outline:none; cursor:default; resize:none; border:0px; padding:10px 0px 10px 10px;";
-  
-      input.spellcheck = autocorrection ? true : false;
-      input.maxLength = characterLimit > 0 ? characterLimit : 524288;
-      input.value = text;
-      input.placeholder = placeholder;
-  
-      if (!hasExistingMobileInput) {
-          inputContainer.appendChild(input);
-          inputContainer.input = input;
-      }
-  
-      if (!hasExistingMobileInput) {
-          var okButton = document.createElement("button");
-          okButton.innerText = "OK";
-          okButton.style = "border:0; position:absolute; left:calc(100% - 75px); top:0px; width:75px; height:100%; margin:0; padding:0; border-radius: 5px; background-color:#fff";
-          okButton.addEventListener("touchend", function() {
-              _JS_MobileKeyboard_Hide(true);
-          });
-  
-          inputContainer.appendChild(okButton);
-          inputContainer.okButton = okButton;
-  
-          // For single-line text input, enter key will close the keyboard.
-          input.addEventListener('keyup', function(e) {
-              if (input.parentNode.multiline) return;
-              if (e.code == 'Enter' || e.which == 13 || e.keyCode == 13) {
-                  _JS_MobileKeyboard_Hide(true);
-              }
-          });
-  
-          // On iOS, the keyboard has a done button that hides the keyboard. The only way to detect
-          // when this happens seems to be when the HTML input looses focus, so we watch for the blur
-          // event on the input element and close the element/keybaord when it's gotten.
-          input.addEventListener("blur", function(e) {
-              _JS_MobileKeyboard_Hide(true);
-              e.stopPropagation();
-              e.preventDefault();
-          });
-  
-          input.select();
-          input.focus();
-      } else {
-          input.select();
       }
   }
 
@@ -16255,10 +16051,8 @@ var wasmImports = {
   "JS_Cursor_SetShow": _JS_Cursor_SetShow,
   "JS_DOM_MapViewportCoordinateToElementLocalCoordinate": _JS_DOM_MapViewportCoordinateToElementLocalCoordinate,
   "JS_DOM_UnityCanvasSelector": _JS_DOM_UnityCanvasSelector,
-  "JS_Eval_OpenURL": _JS_Eval_OpenURL,
   "JS_FileSystem_Initialize": _JS_FileSystem_Initialize,
   "JS_FileSystem_Sync": _JS_FileSystem_Sync,
-  "JS_GetRandomBytes": _JS_GetRandomBytes,
   "JS_Get_WASM_Size": _JS_Get_WASM_Size,
   "JS_GravitySensor_IsRunning": _JS_GravitySensor_IsRunning,
   "JS_GravitySensor_Start": _JS_GravitySensor_Start,
@@ -16275,13 +16069,7 @@ var wasmImports = {
   "JS_Log_StackTrace": _JS_Log_StackTrace,
   "JS_MobileKeybard_GetIgnoreBlurEvent": _JS_MobileKeybard_GetIgnoreBlurEvent,
   "JS_MobileKeyboard_GetKeyboardStatus": _JS_MobileKeyboard_GetKeyboardStatus,
-  "JS_MobileKeyboard_GetText": _JS_MobileKeyboard_GetText,
-  "JS_MobileKeyboard_GetTextSelection": _JS_MobileKeyboard_GetTextSelection,
   "JS_MobileKeyboard_Hide": _JS_MobileKeyboard_Hide,
-  "JS_MobileKeyboard_SetCharacterLimit": _JS_MobileKeyboard_SetCharacterLimit,
-  "JS_MobileKeyboard_SetText": _JS_MobileKeyboard_SetText,
-  "JS_MobileKeyboard_SetTextSelection": _JS_MobileKeyboard_SetTextSelection,
-  "JS_MobileKeyboard_Show": _JS_MobileKeyboard_Show,
   "JS_Module_WebGLContextAttributes_PowerPreference": _JS_Module_WebGLContextAttributes_PowerPreference,
   "JS_Module_WebGLContextAttributes_PremultipliedAlpha": _JS_Module_WebGLContextAttributes_PremultipliedAlpha,
   "JS_Module_WebGLContextAttributes_PreserveDrawingBuffer": _JS_Module_WebGLContextAttributes_PreserveDrawingBuffer,

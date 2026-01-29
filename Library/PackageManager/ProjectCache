@@ -5,7 +5,7 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 639052984230000000
+      ticks: 639053048290000000
     m_Hash: 2326664498
   m_LockFileStatus:
     m_FilePath: /Users/lee.com/UnityProject/3D-unity-Test/Packages/packages-lock.json
@@ -13,7 +13,7 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 639052984650000000
+      ticks: 639053048290000000
     m_Hash: 2299552629
 m_EmbeddedPackageManifests:
   m_ManifestsStatus:
@@ -23,7 +23,7 @@ m_EmbeddedPackageManifests:
       m_ContentTrackingEnabled: 1
       m_ModificationDate:
         serializedVersion: 2
-        ticks: 639052984640000000
+        ticks: 639053048290000000
       m_Hash: 3715743858
 m_LocalPackages:
   m_LocalFileStatus: []

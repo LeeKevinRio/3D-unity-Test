@@ -114,8 +114,7 @@ public class SceneInitializer : MonoBehaviour
         Shader shader = Shader.Find("Custom/StencilSource");
         if (shader == null)
         {
-            Debug.LogError("StencilSource shader not found!");
-            // Fallback to Standard transparent
+            Debug.LogWarning("StencilSource shader not found! Using fallback transparent shader.");
             shader = Shader.Find("Standard");
         }
 
@@ -123,7 +122,21 @@ public class SceneInitializer : MonoBehaviour
         mat.name = box.name + "_Mat";
         mat.SetColor("_Color", sourceColor);
 
+        // 如果是 Standard shader，設定透明模式
+        if (shader.name == "Standard")
+        {
+            mat.SetFloat("_Mode", 3); // Transparent
+            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            mat.SetInt("_ZWrite", 0);
+            mat.DisableKeyword("_ALPHATEST_ON");
+            mat.EnableKeyword("_ALPHABLEND_ON");
+            mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            mat.renderQueue = 3000;
+        }
+
         renderer.material = mat;
+        Debug.Log($"Applied material to {box.name} using shader: {shader.name}");
     }
 
     private void ApplyHoleMaterial(GameObject box)
@@ -134,7 +147,7 @@ public class SceneInitializer : MonoBehaviour
         Shader shader = Shader.Find("Custom/StencilHole");
         if (shader == null)
         {
-            Debug.LogError("StencilHole shader not found!");
+            Debug.LogWarning("StencilHole shader not found! Using fallback transparent shader.");
             shader = Shader.Find("Standard");
         }
 
@@ -142,7 +155,21 @@ public class SceneInitializer : MonoBehaviour
         mat.name = box.name + "_Mat";
         mat.SetColor("_Color", holeColor);
 
+        // 如果是 Standard shader，設定透明模式
+        if (shader.name == "Standard")
+        {
+            mat.SetFloat("_Mode", 3); // Transparent
+            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            mat.SetInt("_ZWrite", 0);
+            mat.DisableKeyword("_ALPHATEST_ON");
+            mat.EnableKeyword("_ALPHABLEND_ON");
+            mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+            mat.renderQueue = 3000;
+        }
+
         renderer.material = mat;
+        Debug.Log($"Applied material to {box.name} using shader: {shader.name}");
 
         // 添加 LineRenderer 線框
         AddWireframe(box, holeColor);

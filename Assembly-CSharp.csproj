@@ -55,6 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/Shaders/StencilHole.shader" />
+    <None Include="Assets/Resources/Shaders/StencilHole.shader" />
+    <None Include="Assets/Resources/Shaders/StencilSource.shader" />
     <None Include="Assets/Shaders/StencilSource.shader" />
   </ItemGroup>
   <ItemGroup>

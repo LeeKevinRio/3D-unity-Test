@@ -8,6 +8,11 @@ ScriptsOnlyBuild:
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
     - UnityEditor.Graphs.AnimatorControllerTool
+    UnityEditor.TestRunner.dll:
+    - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
+    - UnityEditor.TestTools.TestRunner.CommandLineTest.RunData
+    - UnityEditor.TestTools.TestRunner.TestListCacheData
+    - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
   serializedClasses: {}
   methodsToPreserve: []
   sceneClasses:
@@ -20,9 +25,17 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 21
       Script: {instanceID: 0}
+    - Class: 23
+      Script: {instanceID: 0}
     - Class: 28
       Script: {instanceID: 0}
+    - Class: 33
+      Script: {instanceID: 0}
+    - Class: 43
+      Script: {instanceID: 0}
     - Class: 48
+      Script: {instanceID: 0}
+    - Class: 64
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
@@ -157,12 +170,6 @@ ScriptsOnlyBuild:
     className: Dropdown
   - hash:
       serializedVersion: 2
-      Hash: 0d05a85c50ac22ee169d94d8011e49f3
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: SelectionManager
-  - hash:
-      serializedVersion: 2
       Hash: 1553f209ae0b2d5d3a35685fca55f9c3
     assemblyName: Unity.TextMeshPro
     namespaceName: TMPro
@@ -193,7 +200,7 @@ ScriptsOnlyBuild:
     className: RawImage
   - hash:
       serializedVersion: 2
-      Hash: 01e832af3a4ab92525de156a220bdfc2
+      Hash: 1ec18371c35c057d3a0f23a8f1a5cee1
     assemblyName: Assembly-CSharp
     namespaceName: 
     className: SceneInitializer
@@ -227,12 +234,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro
     namespaceName: TMPro
     className: TMP_SpriteAnimator
-  - hash:
-      serializedVersion: 2
-      Hash: 3cd670797318ee9a21a36649560b3bcc
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: WireframeBox
   - hash:
       serializedVersion: 2
       Hash: a1ac4c50e55874de16eee3db71aa9784
@@ -319,28 +320,10 @@ ScriptsOnlyBuild:
     className: Text
   - hash:
       serializedVersion: 2
-      Hash: 10138f9bb1c1f6889f03ab30ac68396b
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: DemoSceneSetup
-  - hash:
-      serializedVersion: 2
       Hash: 540882762544409cc4530e60db00e951
     assemblyName: UnityEngine.UI
     namespaceName: UnityEngine.UI
     className: CanvasScaler
-  - hash:
-      serializedVersion: 2
-      Hash: 933c9bc777838990745a1945c3131f26
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: DragController
-  - hash:
-      serializedVersion: 2
-      Hash: b4ca7f264aca4f119a76fcaf818db94f
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: CSGManager
   - hash:
       serializedVersion: 2
       Hash: 33656f83bb0079184b2206a69690ec46
@@ -361,12 +344,6 @@ ScriptsOnlyBuild:
     className: Scrollbar
   - hash:
       serializedVersion: 2
-      Hash: 83eff6002dbdff2ed6b3c43c9e7f04df
-    assemblyName: Assembly-CSharp
-    namespaceName: 
-    className: TransformWatcher
-  - hash:
-      serializedVersion: 2
       Hash: 8bbce9932f67ad8e7f4eefec87800f94
     assemblyName: Unity.TextMeshPro
     namespaceName: TMPro
@@ -385,16 +362,16 @@ ScriptsOnlyBuild:
     className: ScrollRect
   - hash:
       serializedVersion: 2
-      Hash: 3f16c8427c8b88cb583ffbae7d242110
+      Hash: 941e84219c7af2bd11083a535dbc8810
     assemblyName: Assembly-CSharp
     namespaceName: 
-    className: UIController
+    className: SimpleDragController
   - hash:
       serializedVersion: 2
-      Hash: 3f98f8dbd37130875ce52a7ef480370b
+      Hash: 68bf5d5b15877d19de8d3420787c5088
     assemblyName: Assembly-CSharp
     namespaceName: 
-    className: ShaderIncludes
+    className: HoleBoxUpdater
   platform: 20
   scenePathNames:
   - Assets/Scenes/Demo.unity

@@ -141,7 +141,7 @@ public class HoleBoxUpdater : MonoBehaviour
         {
             if (mat == null) continue;
 
-            mat.SetInt("_HoleBoxCount", count);
+            mat.SetFloat("_HoleBoxCount", count);
             if (count > 0)
             {
                 mat.SetVector("_HoleBox0_Min", holeMins[0]);
@@ -190,7 +190,7 @@ public class HoleBoxUpdater : MonoBehaviour
             if (mat == null) continue;
 
             // 設定 SourceBox 邊界
-            mat.SetInt("_SourceBoxCount", sourceCount);
+            mat.SetFloat("_SourceBoxCount", sourceCount);
             if (sourceCount > 0)
             {
                 mat.SetVector("_SourceBox0_Min", sourceMins[0]);
@@ -221,7 +221,7 @@ public class HoleBoxUpdater : MonoBehaviour
                     otherCount++;
                 }
             }
-            mat.SetInt("_OtherHoleBoxCount", otherCount);
+            mat.SetFloat("_OtherHoleBoxCount", otherCount);
         }
     }
 
