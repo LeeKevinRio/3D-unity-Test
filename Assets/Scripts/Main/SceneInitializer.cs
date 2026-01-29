@@ -105,8 +105,7 @@ public class SceneInitializer : MonoBehaviour
         ground.transform.localScale = new Vector3(3f, 1f, 3f);
         ground.layer = LayerMask.NameToLayer("Ignore Raycast");
 
-        Material groundMat = new Material(Shader.Find("Standard"));
-        groundMat.color = new Color(0.2f, 0.2f, 0.25f);
+        Material groundMat = ShaderHelper.CreateColorMaterial(new Color(0.2f, 0.2f, 0.25f));
         ground.GetComponent<Renderer>().material = groundMat;
 
         // Ambient lighting
@@ -182,8 +181,9 @@ public class SceneInitializer : MonoBehaviour
 
     private void CreateManagers()
     {
-        // === Result Material (GREEN) ===
-        Material resultMat = new Material(Shader.Find("Standard"));
+        // === Result Material (BLUE) ===
+        Shader standardShader = ShaderHelper.GetStandardShader();
+        Material resultMat = new Material(standardShader);
         resultMat.color = resultColor;
 
         GameObject managersObj = new GameObject("_Managers");
@@ -230,19 +230,6 @@ public class SceneInitializer : MonoBehaviour
 
     private Material CreateTransparentMaterial(Color color)
     {
-        Material mat = new Material(Shader.Find("Standard"));
-        mat.color = color;
-
-        // Set up transparency
-        mat.SetFloat("_Mode", 3); // Transparent mode
-        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        mat.SetInt("_ZWrite", 0);
-        mat.DisableKeyword("_ALPHATEST_ON");
-        mat.EnableKeyword("_ALPHABLEND_ON");
-        mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-        mat.renderQueue = 3000;
-
-        return mat;
+        return ShaderHelper.CreateTransparentMaterial(color);
     }
 }

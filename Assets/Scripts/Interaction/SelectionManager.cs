@@ -154,8 +154,8 @@ public class SelectionManager : MonoBehaviour
         // Store original material
         originalMaterial = renderer.material;
 
-        // Create highlight material (fresh Standard shader for consistent behavior)
-        highlightMaterial = new Material(Shader.Find("Standard"));
+        // Create highlight material (using ShaderHelper for WebGL compatibility)
+        highlightMaterial = new Material(ShaderHelper.GetStandardShader());
 
         // Apply highlight effect - make fully opaque and bright
         highlightMaterial.color = highlightColor;

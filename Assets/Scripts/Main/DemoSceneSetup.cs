@@ -77,34 +77,24 @@ public class DemoSceneSetup : MonoBehaviour
 
         if (resultMaterial == null)
         {
-            resultMaterial = new Material(Shader.Find("Standard"));
-            resultMaterial.color = new Color(0.2f, 0.5f, 0.9f, 1f);  // Blue, same as source
+            resultMaterial = ShaderHelper.CreateColorMaterial(new Color(0.2f, 0.5f, 0.9f, 1f));
             resultMaterial.name = "ResultMat";
         }
 
         if (groundMaterial == null)
         {
-            groundMaterial = new Material(Shader.Find("Standard"));
-            groundMaterial.color = new Color(0.4f, 0.4f, 0.4f, 1f);
+            groundMaterial = ShaderHelper.CreateColorMaterial(new Color(0.4f, 0.4f, 0.4f, 1f));
             groundMaterial.name = "GroundMat";
         }
     }
 
     private Material CreateTransparentMaterial(string name, Color color)
     {
-        Material mat = new Material(Shader.Find("Standard"));
-        mat.name = name;
-        mat.color = color;
-
-        mat.SetFloat("_Mode", 3);
-        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        mat.SetInt("_ZWrite", 0);
-        mat.DisableKeyword("_ALPHATEST_ON");
-        mat.EnableKeyword("_ALPHABLEND_ON");
-        mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
-        mat.renderQueue = 3000;
-
+        Material mat = ShaderHelper.CreateTransparentMaterial(color);
+        if (mat != null)
+        {
+            mat.name = name;
+        }
         return mat;
     }
 

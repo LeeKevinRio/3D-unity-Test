@@ -30,8 +30,23 @@ public class WireframeBox : MonoBehaviour
 
     private void CreateWireframe()
     {
-        // Create unlit material for lines
-        lineMaterial = new Material(Shader.Find("Sprites/Default"));
+        // Create unlit material for lines - use shader that works in WebGL
+        Shader lineShader = Shader.Find("Sprites/Default");
+        if (lineShader == null)
+        {
+            lineShader = Shader.Find("UI/Default");
+        }
+        if (lineShader == null)
+        {
+            lineShader = Shader.Find("Unlit/Color");
+        }
+        if (lineShader == null)
+        {
+            // Fallback to hidden shader that's always available
+            lineShader = Shader.Find("Hidden/Internal-Colored");
+        }
+
+        lineMaterial = new Material(lineShader);
         lineMaterial.color = wireColor;
 
         // A cube has 12 edges

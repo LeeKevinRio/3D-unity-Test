@@ -106,7 +106,68 @@ public class CSGDemoEditorSetup : EditorWindow
         PlayerSettings.productName = "CSG Demo";
         PlayerSettings.companyName = "Demo";
 
+        // Add required shaders to Always Included Shaders
+        AddAlwaysIncludedShaders();
+
         Debug.Log("WebGL settings configured!");
+    }
+
+    private static void AddAlwaysIncludedShaders()
+    {
+        // Get the graphics settings asset
+        var graphicsSettings = AssetDatabase.LoadAssetAtPath<UnityEngine.Rendering.GraphicsSettings>(
+            "ProjectSettings/GraphicsSettings.asset");
+
+        if (graphicsSettings == null)
+        {
+            Debug.LogWarning("Could not load GraphicsSettings. Please manually add shaders to Always Included Shaders.");
+            Debug.Log("Go to Edit > Project Settings > Graphics and add:");
+            Debug.Log("  - Standard");
+            Debug.Log("  - Sprites/Default");
+            Debug.Log("  - UI/Default");
+            Debug.Log("  - Unlit/Color");
+            return;
+        }
+
+        SerializedObject serializedGraphics = new SerializedObject(graphicsSettings);
+        SerializedProperty alwaysIncluded = serializedGraphics.FindProperty("m_AlwaysIncludedShaders");
+
+        // Shaders we need to include
+        string[] shaderNames = {
+            "Standard",
+            "Sprites/Default",
+            "UI/Default",
+            "Unlit/Color",
+            "Mobile/Diffuse"
+        };
+
+        foreach (string shaderName in shaderNames)
+        {
+            Shader shader = Shader.Find(shaderName);
+            if (shader != null)
+            {
+                // Check if already included
+                bool found = false;
+                for (int i = 0; i < alwaysIncluded.arraySize; i++)
+                {
+                    if (alwaysIncluded.GetArrayElementAtIndex(i).objectReferenceValue == shader)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found)
+                {
+                    alwaysIncluded.InsertArrayElementAtIndex(alwaysIncluded.arraySize);
+                    alwaysIncluded.GetArrayElementAtIndex(alwaysIncluded.arraySize - 1).objectReferenceValue = shader;
+                    Debug.Log("Added shader to Always Included: " + shaderName);
+                }
+            }
+        }
+
+        serializedGraphics.ApplyModifiedProperties();
+        AssetDatabase.SaveAssets();
     }
 
     [MenuItem("CSG Demo/Build WebGL")]
