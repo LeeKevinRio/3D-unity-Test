@@ -1,10 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-/// <summary>
-/// 簡單的拖曳控制器，點擊選取物件後可在 XZ 平面拖曳
-/// WebGL 相容版本 - 支援滑鼠和觸控
-/// </summary>
 public class SimpleDragController : MonoBehaviour
 {
     [SerializeField] private Camera mainCamera;
@@ -12,9 +8,6 @@ public class SimpleDragController : MonoBehaviour
 
     [Header("=== Selection Highlight ===")]
     [SerializeField] private Color highlightColor = new Color(1f, 1f, 0.3f, 0.7f);
-
-    [Header("=== Debug ===")]
-    [SerializeField] private bool enableDebugLog = true;
 
     private GameObject selectedObject;
     private bool isDragging;
@@ -28,11 +21,6 @@ public class SimpleDragController : MonoBehaviour
     // 效能優化：使用 HashSet 做 O(1) 查詢
     private HashSet<GameObject> selectableSet;
 
-    // 預先分配 Raycast 結果陣列
-    private readonly RaycastHit[] raycastResults = new RaycastHit[16];
-
-    private bool isInitialized = false;
-
     private void Awake()
     {
         dragPlane = new Plane(Vector3.up, Vector3.zero);
@@ -41,50 +29,17 @@ public class SimpleDragController : MonoBehaviour
 
     private void Start()
     {
-        // 延遲初始化 Camera，確保在 WebGL 上能正確取得
         InitializeCamera();
     }
 
     private void InitializeCamera()
     {
         if (mainCamera == null)
-        {
             mainCamera = Camera.main;
-
-            if (mainCamera == null)
-            {
-                // 嘗試用 tag 找
-                GameObject camObj = GameObject.FindGameObjectWithTag("MainCamera");
-                if (camObj != null)
-                    mainCamera = camObj.GetComponent<Camera>();
-            }
-
-            if (mainCamera == null)
-            {
-                // 找任何 Camera
-                mainCamera = FindObjectOfType<Camera>();
-            }
-        }
-
-        if (enableDebugLog)
-        {
-            if (mainCamera != null)
-                Debug.Log($"[SimpleDrag] Camera found: {mainCamera.name}");
-            else
-                Debug.LogError("[SimpleDrag] No camera found!");
-        }
-
-        isInitialized = (mainCamera != null);
     }
 
     private void Update()
     {
-        if (!isInitialized)
-        {
-            InitializeCamera();
-            if (!isInitialized) return;
-        }
-
         HandleInput();
     }
 
@@ -144,31 +99,15 @@ public class SimpleDragController : MonoBehaviour
     private void TrySelectAndStartDrag(Vector3 screenPos)
     {
         if (mainCamera == null)
-        {
-            if (enableDebugLog) Debug.LogWarning("[SimpleDrag] Camera is null");
             return;
-        }
 
         if (selectableSet == null || selectableSet.Count == 0)
-        {
-            if (enableDebugLog) Debug.LogWarning("[SimpleDrag] No selectable objects registered");
             return;
-        }
 
         Ray ray = mainCamera.ScreenPointToRay(screenPos);
 
-        if (enableDebugLog)
-        {
-            Debug.Log($"[SimpleDrag] Raycast from screen {screenPos}, ray origin: {ray.origin}, dir: {ray.direction}");
-        }
-
         // 使用標準 RaycastAll (更可靠)
         RaycastHit[] hits = Physics.RaycastAll(ray, 100f);
-
-        if (enableDebugLog)
-        {
-            Debug.Log($"[SimpleDrag] Raycast hit {hits.Length} objects");
-        }
 
         GameObject bestSelectable = null;
         float bestDistance = float.MaxValue;
@@ -179,11 +118,6 @@ public class SimpleDragController : MonoBehaviour
             if (hit.collider == null) continue;
 
             GameObject hitObj = hit.collider.gameObject;
-
-            if (enableDebugLog)
-            {
-                Debug.Log($"[SimpleDrag] Hit: {hitObj.name}, isSelectable: {IsSelectable(hitObj)}");
-            }
 
             if (!IsSelectable(hitObj)) continue;
 
@@ -218,14 +152,6 @@ public class SimpleDragController : MonoBehaviour
             dragOffset.y = 0;
 
             ApplyHighlight(selectedObject);
-
-            if (enableDebugLog)
-                Debug.Log($"[SimpleDrag] Selected: {bestSelectable.name}");
-        }
-        else
-        {
-            if (enableDebugLog)
-                Debug.Log("[SimpleDrag] No selectable object hit");
         }
     }
 
@@ -267,11 +193,6 @@ public class SimpleDragController : MonoBehaviour
 
     private void EndDrag()
     {
-        if (isDragging && enableDebugLog)
-        {
-            Debug.Log("[SimpleDrag] Drag ended");
-        }
-
         RemoveHighlight();
         isDragging = false;
         selectedObject = null;
@@ -312,16 +233,8 @@ public class SimpleDragController : MonoBehaviour
                 if (col == null)
                 {
                     obj.AddComponent<BoxCollider>();
-                    if (enableDebugLog)
-                        Debug.Log($"[SimpleDrag] Added BoxCollider to {obj.name}");
                 }
-
-                if (enableDebugLog)
-                    Debug.Log($"[SimpleDrag] Registered: {obj.name}");
             }
         }
-
-        if (enableDebugLog)
-            Debug.Log($"[SimpleDrag] Total registered: {selectableSet.Count} objects");
     }
 }

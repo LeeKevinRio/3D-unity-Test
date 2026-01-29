@@ -1,8 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// 只在 Box 位置改變時更新 Shader 參數（效能優化版）
-/// </summary>
 public class HoleBoxUpdater : MonoBehaviour
 {
     [SerializeField] private GameObject[] sourceBoxes;
