@@ -6,9 +6,20 @@
   "inputs": [
     "/Users/lee.com/UnityProject/3D-unity-Test/Packages/manifest.json",
     "/Users/lee.com/UnityProject/3D-unity-Test/Packages/packages-lock.json",
-    "/Applications/Unity/Hub/Editor/6000.3.0f1/Unity.app/Contents/Resources/PackageManager/BuiltInPackages/BuiltInPackagesCombined.sha1"
+    "/Applications/Unity/Hub/Editor/6000.3.0f1/Unity.app/Contents/Resources/PackageManager/BuiltInPackages/BuiltInPackagesCombined.sha1",
+    "/Users/lee.com/UnityProject/3D-unity-Test/Packages/com.unity.ide.visualstudio/package.json"
   ],
   "outputs": {
+    "com.unity.ide.visualstudio@file:/Users/lee.com/UnityProject/3D-unity-Test/Packages/com.unity.ide.visualstudio": {
+      "name": "com.unity.ide.visualstudio",
+      "displayName": "Visual Studio Editor",
+      "resolvedPath": "/Users/lee.com/UnityProject/3D-unity-Test/Packages/com.unity.ide.visualstudio",
+      "fingerprint": "a99d56dec63ffb3a911a5a9bce9b77ba862a601c",
+      "editorCompatibility": "2021.3.0a1",
+      "version": "2.0.26",
+      "source": "embedded",
+      "testable": true
+    },
     "com.unity.multiplayer.center@1.0.1": {
       "name": "com.unity.multiplayer.center",
       "displayName": "Multiplayer Center",
@@ -314,6 +325,26 @@
       "displayName": "Hierarchy Core",
       "resolvedPath": "/Applications/Unity/Hub/Editor/6000.3.0f1/Unity.app/Contents/Resources/PackageManager/BuiltInPackages/com.unity.modules.hierarchycore",
       "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.test-framework@1.6.0": {
+      "name": "com.unity.test-framework",
+      "displayName": "Test Framework",
+      "resolvedPath": "/Users/lee.com/UnityProject/3D-unity-Test/Library/PackageCache/com.unity.test-framework@0b7a23ab2e1d",
+      "fingerprint": "0b7a23ab2e1d74441a5afdffa63f417929756957",
+      "editorCompatibility": "6000.0.44f1",
+      "version": "1.6.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.ext.nunit@2.0.5": {
+      "name": "com.unity.ext.nunit",
+      "displayName": "Custom NUnit",
+      "resolvedPath": "/Users/lee.com/UnityProject/3D-unity-Test/Library/PackageCache/com.unity.ext.nunit@d8c07649098d",
+      "fingerprint": "d8c07649098d3936da4c8ab500960c1776b44592",
+      "editorCompatibility": "2019.4.0a1",
+      "version": "2.0.5",
       "source": "builtin",
       "testable": false
     }
